@@ -6,6 +6,8 @@ Created on Thu May 22 16:33:31 2025
 """
 print("this is my first code change on git")
 
+print("hey this is new feature")
+
 # === src/closed/incident.py ===
 import time
 from datetime import datetime
