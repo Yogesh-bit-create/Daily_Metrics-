@@ -49,5 +49,8 @@ try :
     print("\n✅ Pipeline completed successfully.")
     print(f"⏱️ Total time: {time.time() - start_time:.2f} seconds")
 
+finally:
+  print("please check a file ")
+
 if __name__ == "__main__":
     main()
