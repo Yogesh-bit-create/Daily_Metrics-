@@ -1,0 +1,62 @@
+name: 'Promote/Deploy to environment'
+
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Promote Version To:'
+        required: true
+        type: choice
+        options: 
+          - cut1
+          - cut2
+          - cut3
+          - cut4
+          - ete1
+          - ete2
+          - ete3
+          - ete4
+          - stg1
+          - stg2
+          - stg3
+          - stg4
+        default: ete1
+      promote-from:
+        description: 'Promote Version From:'
+        required: false
+        type: choice
+        options: 
+          - none
+          - cut1
+          - cut2
+          - cut3
+          - cut4
+          - ete1
+          - ete2
+          - ete3
+          - ete4
+          - stg1
+          - stg2
+          - stg3
+          - stg4
+        default: none
+      version:
+        description: 'Override the version:'
+        required: false
+        type: string
+
+
+permissions:
+  contents: read
+
+
+jobs:
+  promote-or-deploy:
+    name: 'Promote or deploy'
+    uses: cna-insurance/tech-dev-tools_ghrw-common/.github/workflows/rw_promote-or-deploy-in-env.yml@production
+    with:
+      environment: ${{ inputs.environment }}
+      promote-from: ${{ inputs.promote-from }}
+      version: ${{ inputs.version }}
+      # deployment-files-name: some-app-01,some-app-02 # Optional input, if the deployment file name is different from app repo name or have to deploy the same container in multiple workloads
