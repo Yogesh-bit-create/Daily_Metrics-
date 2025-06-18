@@ -51,6 +51,7 @@ try :
 
 finally:
   print("please check a file ")
+  print("hello")
 
 if __name__ == "__main__":
     main()
