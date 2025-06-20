@@ -1,7 +1,6 @@
 name: 'CNA GitHub flow Python project'
 
-#trying to solve issue
-#added a new line to chech merge part
+#trying to solve issue i have added somenew changes in it
 
 env:
   WORKFLOW_VERSION: '1.0.0' # Update this version whenever you make changes
