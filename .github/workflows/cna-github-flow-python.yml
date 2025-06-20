@@ -1,0 +1,84 @@
+name: 'CNA GitHub flow Python project'
+
+#trying to solve issue
+
+env:
+  WORKFLOW_VERSION: '1.0.0' # Update this version whenever you make changes
+
+on:
+  schedule: # Please uncomment the timing that you would like to deploy daily.
+    - cron: '0 1 * * *'      # 7:00 AM IST / 7:30 PM CST
+    #- cron: '0 2 * * *'      # 8:00 AM IST / 8:30 PM CST
+    #- cron: '0 11 * * *'     # 5:00 PM IST / 6:30 AM CST
+    #- cron: '0 12 * * *'     # 6:00 PM IST / 7:30 AM CST
+  push:
+    branches:
+      - main
+      - cut1
+      - channel** # Any branch starting with 'channel'. Recommended naming convention of channel specific branches is channel<number>[-<something>]. For eg.: channel2-api
+  pull_request:
+    branches:
+      - main
+      - channel** # Any branch starting with 'channel'. Recommended naming convention of channel specific branches is channel<number>[-<something>]. For eg.: channel2-api
+      - production
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - closed
+  workflow_dispatch:
+    inputs:
+      release-type:
+        description: 'Select the release type'
+        required: true
+        type: choice
+        options:
+          - feature
+          - fix
+        default: 'main'
+      deploy:
+        description: 'Need to deploy?'
+        required: false
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+        default: 'false'
+      environment:
+        description: 'If it needs to deploy, then which environment the deployment should be'
+        required: false
+        type: choice
+        options: 
+          - cut1
+          - cut2
+          - cut3
+          - ete1
+          - ete2
+          - ete3
+        default: cut1
+
+
+permissions:
+  actions: read
+  contents: write
+  id-token: write
+  pull-requests: write
+   
+        
+jobs:
+  build-containarize-deploy:
+    name: 'Build and Deploy Python'
+    uses: cna-insurance/tech-dev-tools_ghrw-python/.github/workflows/rw_cna-github-flow-python.yml@production
+    with:
+      manual-trigger-branch: ${{ github.ref_name }}
+      manual-trigger-release-type: ${{ inputs.release-type }}
+      manual-trigger-deploy: ${{ inputs.deploy }}
+      manual-trigger-deploy-environment: ${{ inputs.environment }}
+      # requirements-txt-path: requirements.txt # Optional input, if you have a custom requirements file path
+      # dockerfile-path: ci/docker/Dockerfile # Optional input, if you have a custom Dockerfile
+      # docker-build-context: ci/docker # Optional input, if you have a custom Docker build context
+      # snapshot-deploy-environment: cut1 # Optional input, if you have different deployment environment for snapshot builds
+      # release-deploy-environment: stg1 # Optional input, if you have different deployment environmnet for release builds
+      # deploy-repo-name: tdevtool_tdevtool-gke-deploy # Optional input, if your deployment repository is not following the standard naming convention
+      # deployment-files-name: some-app-01,some-app-02 # Optional input, if the deployment file name is different from app repo name or have to deploy the same container in multiple workloads
+      # veracode-scan-timeout: 20 # Opitonal input, if you want to increase the veracode timeout in minutes 
